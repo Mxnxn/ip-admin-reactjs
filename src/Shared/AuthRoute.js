@@ -7,7 +7,7 @@ const AuthRoute = ({ component: Component, ...rest }) => {
         <Route
             {...rest}
             render={(props) => {
-                if (window.localStorage.getItem("token")) {
+                if (window.localStorage.getItem("_b") && window.localStorage.getItem("_uid") && window.localStorage.getItem("_c")) {
                     return <Component {...props} />;
                 } else {
                     return <Redirect to={LOGIN.path} />;

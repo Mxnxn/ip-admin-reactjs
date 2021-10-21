@@ -4,23 +4,22 @@ import { useEffect } from "react";
 import { useState } from "react";
 import HeadingWithSearch from "Shared/CardCustomizations/HeadingWithSearch";
 import Loader from "Shared/Loader";
-import { GetAllUsers, RestrictUser, UnblockUser } from "User/Repository/User";
 import { FiMoreVertical } from "react-icons/fi";
 import Snackbar from "Shared/Notification/Snackbar";
-import { Link } from "react-router-dom";
-import { USER } from "Constants/Routes";
-import ImagePreview from "Shared/Modals/ImagePreview";
+import { EditCategory, GetCategories } from "Category/Repository/Category";
+import ChangeModal from "Shared/Modals/ChangeModal";
 
-const UserList = () => {
+const CategoryList = () => {
     const [state, setState] = useState({
-        users: [],
+        categories: [],
         dataFetched: false,
     });
 
     useEffect(() => {
         const fetch = async () => {
-            const users = await GetAllUsers();
-            if (users.status) setState({ ...state, users: users.message, dataFetched: true });
+            const categories = await GetCategories();
+            console.log(categories);
+            if (categories.status) setState({ ...state, categories: categories.message, dataFetched: true });
         };
         fetch();
         //  eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,64 +29,55 @@ const UserList = () => {
 
     const displaySnackbar = Snackbar();
 
-    const onClickBlock = async (id) => {
-        const response = await RestrictUser(id);
-        setMoreMenu(null);
-        if (response.status) {
-            const index = state.users.findIndex((user) => user._id === id);
-            state.users[index].granted_access = false;
-            setState({ ...state });
-            return displaySnackbar({ head: "User", variant: "danger", message: response.message[0] });
-        }
-        return displaySnackbar({ head: "User", variant: "danger", message: response.message[0] });
-    };
+    const [modal, setModal] = useState({ open: false, text: "", catid: "" });
 
-    const onClickActive = async (id) => {
-        const response = await UnblockUser(id);
-        setMoreMenu(null);
+    const editCategoryName = async (id) => {
+        const formdata = new FormData();
+        formdata.set("cat", id);
+        formdata.set("name", modal.text);
+        const response = await EditCategory(formdata);
+        console.log(response);
         if (response.status) {
-            const index = state.users.findIndex((user) => user._id === id);
-            state.users[index].granted_access = true;
+            const index = state.categories.findIndex((el) => el._id === id);
+            state.categories[index].name = modal.text;
             setState({ ...state });
-            return displaySnackbar({ head: "User", variant: "success", message: response.message[0] });
+            setModal({ open: false, text: "", catid: "" });
+            console.log("here", response);
+            return displaySnackbar({ head: "Category", variant: "success", message: response.message[0] });
         }
-        return displaySnackbar({ head: "User", variant: "danger", message: response.message[0] });
+        setModal({ open: false, text: "", catid: "" });
+        return displaySnackbar({ head: "Category", variant: "danger", message: response.message[0] });
     };
-
-    const [modal, setModal] = useState({ open: false, imageSrc: null });
 
     return state.dataFetched ? (
         <>
             <Row>
-                <ImagePreview modal={modal.open} imageSrc={modal.imageSrc} onCancelHandler={() => setModal({ open: false, imageSrc: null })} />
-                <Col className="mb-5 mb-xl-0" xl="12">
+                <ChangeModal
+                    modal={modal.open}
+                    state={modal}
+                    onCancelHandler={() => setModal({ open: false, text: "", catid: "" })}
+                    onChangeValue={(evt) => setModal({ ...modal, text: evt.target.value })}
+                    handleSubmit={() => editCategoryName(modal.catid)}
+                />
+                <Col className="mb-5 mb-xl-0" xl="5">
                     <Card className={"bg-white"}>
                         <CardHeader className="bg-white border-0">
-                            <HeadingWithSearch mainHeading={"Users"} subHeading={"Added"} btnName={"Add"} disableBtn={true} />
+                            <HeadingWithSearch mainHeading={"Categories"} subHeading={"Added"} btnName={"Add"} />
                         </CardHeader>
                         <Table className={"pp table-white table-hover table-flush"} responsive={window.innerWidth < 1280 ? true : false}>
                             <thead className={"thead-light"}>
                                 <tr>
+                                    <th scope="col">#</th>
                                     <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Access</th>
+
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {state.users.map((user, idx) => (
+                                {state.categories.map((cat, idx) => (
                                     <tr>
-                                        <th scope="row">{user.name}</th>
-                                        <th scope="row">{user.email}</th>
-                                        <th scope="row">{user.phone}</th>
-                                        <th scope="row">
-                                            {user.granted_access ? (
-                                                <span className="text-success">Granted</span>
-                                            ) : (
-                                                <span className="text-danger">Restricted</span>
-                                            )}
-                                        </th>
+                                        <th scope="row">{idx + 1}</th>
+                                        <th scope="row">{cat.name}</th>
                                         <th scope="row">
                                             <div className="dropdown ">
                                                 <button
@@ -112,31 +102,19 @@ const UserList = () => {
                                                     }
                                                     x-placement="bottom-end"
                                                 >
-                                                    <span onClick={() => {}} role="menuitem" className="dropdown-item cp">
-                                                        Preview Orders
-                                                    </span>
-                                                    <Link to={`${USER.path}/${user._id}`} role="menuitem" className="dropdown-item cp">
-                                                        Preview Wallet
-                                                    </Link>
                                                     <span
                                                         onClick={() => {
-                                                            setModal({ open: true, imageSrc: user.businessproof });
+                                                            setModal({ open: true, text: cat.name, catid: cat._id });
                                                             setMoreMenu(null);
                                                         }}
                                                         role="menuitem"
                                                         className="dropdown-item cp"
                                                     >
-                                                        Preview BusinessProof
+                                                        Edit
                                                     </span>
-                                                    {user.granted_access ? (
-                                                        <span onClick={() => onClickBlock(user._id)} role="menuitem" className="dropdown-item cp text-danger">
-                                                            Restrict
-                                                        </span>
-                                                    ) : (
-                                                        <span onClick={() => onClickActive(user._id)} role="menuitem" className="dropdown-item cp text-success">
-                                                            Unblock
-                                                        </span>
-                                                    )}
+                                                    <span role="menuitem" className="dropdown-item cp text-danger">
+                                                        Delete
+                                                    </span>
                                                 </div>
                                             </div>
                                         </th>
@@ -162,4 +140,4 @@ const UserList = () => {
     );
 };
 
-export default UserList;
+export default CategoryList;

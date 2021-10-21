@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = ({ bg }) => {
     return (
-        <div className={bg === "primary" ? "header  pt-5 pt-md-8" : "header pb-8 pt-5 pt-md-8"}>
+        <div className={bg === "primary" ? "header  pt-4 pt-md-8" : "header pb-8 pt-4 pt-md-8"}>
             {/* <Container fluid>
                 <div className="header-body">
                     <Row>

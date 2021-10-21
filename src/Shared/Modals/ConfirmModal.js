@@ -1,23 +1,28 @@
 import React from "react";
 import { Row, Col, Button, Modal, ModalHeader, ModalFooter, ModalBody } from "reactstrap";
-const DeleteModal = ({ modal, modalHead, onCancelHandler }) => {
+const ConfirmModal = ({ modal, onCancelHandler, handleSubmit }) => {
     return (
         <Modal isOpen={modal} size="md">
             <ModalHeader className="bg" toggle={onCancelHandler} style={{ background: "#F1F6FF" }}>
-                <span className="text fs-24 geb text-primary">Delete {modalHead}</span>
+                <span className="text fs-24 geb text-primary">Confirm</span>
             </ModalHeader>
             <ModalBody style={{ background: "#F1F6FF" }}>
                 <Col>
                     <Row>
-                        <h4 className=" pp">Are you sure?</h4>
+                        <h3 className=" pp">Are you sure?</h3>
                     </Row>
                 </Col>
             </ModalBody>
             <ModalFooter style={{ background: "#F1F6FF" }}>
-                <Button color="danger">Delete</Button>
+                <Button color="danger" onClick={onCancelHandler}>
+                    No
+                </Button>
+                <Button color="primary" onClick={handleSubmit}>
+                    Yes
+                </Button>
             </ModalFooter>
         </Modal>
     );
 };
 
-export default DeleteModal;
+export default ConfirmModal;

@@ -3,7 +3,7 @@ import { Button, Card, CardBody, FormGroup, Form, Input, InputGroupAddon, InputG
 import { Mail, Lock, AlertOctagon } from "react-feather";
 import { Link } from "react-router-dom";
 import { FORGOT, LOGIN, REGISTER } from "Constants/Routes";
-import { loginAdmin } from "../repository/Authentication";
+import { LoginAdmin } from "../repository/Authentication";
 import { useHistory } from "react-router-dom";
 import { Loader } from "Shared/Loader/Loader";
 
@@ -19,9 +19,11 @@ const Login = ({ setView }) => {
         if (!password) return setError("Invalid password.");
         setLoading(true);
         try {
-            const response = await loginAdmin({ email, password });
-            if (response.success) {
-                localStorage.setItem("token", response.data);
+            const response = await LoginAdmin({ email, password });
+            if (response.status) {
+                localStorage.setItem("_b", response.message.token);
+                localStorage.setItem("_c", response.message.email);
+                localStorage.setItem("_uid", response.message.uid);
                 history.push("/admin/dashboard");
             } else {
                 setError(response.data);

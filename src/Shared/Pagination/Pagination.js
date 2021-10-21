@@ -7,7 +7,7 @@ const Pagination = ({ setPage, currentPage, count, fromPath }) => {
     console.log(count);
     let pages = [];
 
-    for (let i = 1; i <= Math.ceil(count / 15); i++) {
+    for (let i = 1; i <= Math.ceil(count / 30); i++) {
         pages.push(i);
     }
 

@@ -1,11 +1,11 @@
 import React from "react";
 import { FormGroup, Form, Input, Row, Col, Container, Button, Modal, ModalHeader, ModalFooter } from "reactstrap";
 
-const ChangeALT = ({ modal, onCancelHandler, state, onChangeValue, handleSubmit }) => {
+const ChangeModal = ({ modal, onCancelHandler, state, onChangeValue, handleSubmit }) => {
     return (
-        <Modal isOpen={modal} size="lg" toggle={onCancelHandler}>
+        <Modal isOpen={modal} size="lg">
             <ModalHeader className="bg" toggle={onCancelHandler}>
-                <span className="text fs-24 geb">Add Comment</span>
+                <span className="text fs-24 geb">Change</span>
             </ModalHeader>
             <Container fluid>
                 <Col>
@@ -18,7 +18,7 @@ const ChangeALT = ({ modal, onCancelHandler, state, onChangeValue, handleSubmit 
                                         className="nn form-control-alternative"
                                         value={state.text}
                                         name="clientName"
-                                        placeholder="Name"
+                                        placeholder="Enter text"
                                         onChange={onChangeValue}
                                         type="text"
                                     />
@@ -33,11 +33,11 @@ const ChangeALT = ({ modal, onCancelHandler, state, onChangeValue, handleSubmit 
                     Cancel
                 </Button>
                 <Button className="fira" onClick={handleSubmit} color="primary">
-                    Add
+                    Save
                 </Button>
             </ModalFooter>
         </Modal>
     );
 };
 
-export default ChangeALT;
+export default ChangeModal;

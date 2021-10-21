@@ -1,12 +1,10 @@
-import { Home, Star, Tool, Users } from "react-feather";
-import { AiOutlinePicture } from "react-icons/ai";
-import { FaCoins } from "react-icons/fa";
-import { MdLocalOffer } from "react-icons/md";
-import { CgArrowsExchange } from "react-icons/cg";
-import { HiOutlineTruck } from "react-icons/hi";
+import { Home, Users } from "react-feather";
+import { BiOutline, BiTransferAlt } from "react-icons/bi";
+import { FiPackage } from "react-icons/fi";
+
 export const ADMIN = {
     heading: "Admin",
-    path: "/admin",
+    path: "",
     icon: Users,
     id: 3,
 };
@@ -22,7 +20,28 @@ export const USER = {
     heading: "Users",
     path: ADMIN.path + "/users",
     icon: Users,
-    id: 7,
+    id: 2,
+};
+
+export const CATEGORY = {
+    heading: "Category",
+    path: ADMIN.path + "/category",
+    icon: BiOutline,
+    id: 3,
+};
+
+export const BALANCEREQUEST = {
+    heading: "Balance Requests",
+    path: ADMIN.path + "/recentrequests",
+    icon: BiTransferAlt,
+    id: 4,
+};
+
+export const PRODUCT = {
+    heading: "Products",
+    path: ADMIN.path + "/products",
+    icon: FiPackage,
+    id: 5,
 };
 
 export const AUTH = {
@@ -54,7 +73,10 @@ export const AUTHROUTES = {
 };
 
 export const ALLROUTES = {
-    "/admin": ADMIN,
-    "/admin/dashboard": DASHBOARD,
-    "/admin/users": USER,
+    "/": ADMIN,
+    "/dashboard": DASHBOARD,
+    "/users": USER,
+    "/category": CATEGORY,
+    "/recentrequests": BALANCEREQUEST,
+    "/products": PRODUCT,
 };

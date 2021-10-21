@@ -9,7 +9,7 @@ import ReverseAuthRoute from "Shared/ReverseAuthRoute";
 
 const App = (props) => {
     return (
-        <BrowserRouter basename="/">
+        <BrowserRouter basename="/admin/">
             <NotificationProvider>
                 <ReverseAuthRoute path={AUTH.path} component={Authentication} />
                 <AuthRoute path={ADMIN.path} component={AdminWithSidenav} />

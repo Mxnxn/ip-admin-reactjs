@@ -1,4 +1,4 @@
-import { DASHBOARD, CATEGORY, BRAND, PRODUCT, BLOG, USER, TAX, COUPON, BANNER, VARIATIONS, ORDER } from "Constants/Routes";
+import { BALANCEREQUEST, CATEGORY, DASHBOARD, PRODUCT, USER } from "Constants/Routes";
 import React from "react";
 import { Bell } from "react-feather";
 /* eslint-disable */
@@ -22,13 +22,14 @@ const Sidebar = ({ togglePanel }) => {
 
     const currentPath = (path) => {
         const { pathname } = useLocation();
-        const pths = "/" + pathname.split("/")[1] + "/" + pathname.split("/")[2];
-        return pths === path ? true : false;
+
+        // const pths = "/" + pathname.split("/")[1] + "/" + pathname.split("/")[2];
+        return pathname === path ? true : false;
     };
     // creates the links that appear in the left menu / Sidebar
 
     return (
-        <Navbar className={`navbar-vertical fixed-left navbar-light bg-default`} style={{ zIndex: 1000000 }} expand="md" id="sidenav-main">
+        <Navbar className={`navbar-vertical fixed-left navbar-light bg-default`} style={{ zIndex: 100 }} expand="md" id="sidenav-main">
             <Container fluid>
                 <button className="navbar-toggler" type="button" onClick={toggleCollapse}>
                     <span className="navbar-toggler-icon" />
@@ -80,13 +81,20 @@ const Sidebar = ({ togglePanel }) => {
                     <Nav className="mb-md-3" navbar>
                         <SidebarLink Icon={DASHBOARD.icon} text={DASHBOARD.heading} isActive={currentPath(DASHBOARD.path)} url={DASHBOARD.path + "/1"} />
                         <SidebarLink Icon={USER.icon} text={USER.heading} isActive={currentPath(USER.path)} url={USER.path} />
+                        <SidebarLink
+                            Icon={BALANCEREQUEST.icon}
+                            text={BALANCEREQUEST.heading}
+                            isActive={currentPath(BALANCEREQUEST.path)}
+                            url={BALANCEREQUEST.path + "/1"}
+                        />
                     </Nav>
                     <Divider />
                     <h6 className="navbar-heading text-muted" style={{ letterSpacing: "1.5px", fontSize: "14px" }}>
                         More
                     </h6>
                     <Nav className="mb-md-3" navbar>
-                        <SidebarLink Icon={USER.icon} text={USER.heading} isActive={currentPath(USER.path)} url={USER.path} />
+                        <SidebarLink Icon={CATEGORY.icon} text={CATEGORY.heading} isActive={currentPath(CATEGORY.path)} url={CATEGORY.path} />
+                        <SidebarLink Icon={PRODUCT.icon} text={PRODUCT.heading} isActive={currentPath(PRODUCT.path)} url={PRODUCT.path} />
                     </Nav>
                 </Collapse>
             </Container>

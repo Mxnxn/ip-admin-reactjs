@@ -253,11 +253,19 @@
 
 #dropdownmenu-dp {
     top: 50px !important;
-    left: -140px !important;
+    left: -178px !important;
 }
 
 @import "./panel.scss";
 
 .card-bg {
     box-shadow: 4px 4px 25px -8px #115ef6;
+}
+
+.table-dropdown-menu {
+    position: absolute;
+    transform: translate3d(-160px, 31px, 0px);
+    top: 0px;
+    left: 0px;
+    will-change: transform;
 }

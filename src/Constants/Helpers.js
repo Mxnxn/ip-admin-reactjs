@@ -4,8 +4,11 @@ export const getDate = (dt) => {
     const dd = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
     const mm = months[date.getMonth()];
     const year = date.getFullYear();
-
-    return `${dd} ${mm}, ${year}`;
+    const HH = date.getHours() > 12 ? date.getHours() % 12 : date.getHours();
+    const MM = date.getMinutes();
+    const SS = date.getMinutes();
+    const ampm = date.getHours() > 12 ? "PM" : "AM";
+    return `${HH}:${MM}:${SS} ${ampm} ${dd} ${mm}, ${year}`;
 };
 
 export const setDate = (dt) => {
