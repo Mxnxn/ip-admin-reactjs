@@ -10,3 +10,5 @@ export const LIMIT_LIST = [
     { value: "Overall", code: "overall" },
     { value: "Per User", code: "per_user" },
 ];
+
+export const FIXSIZES = [1, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 10];

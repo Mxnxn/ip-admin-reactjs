@@ -13,6 +13,7 @@ import { GetCategories } from "Category/Repository/Category";
 import KeywordBadge from "Shared/KeywordBadge";
 import { RiCloseFill } from "react-icons/ri";
 import { AddNewProduct } from "Product/repository/Product";
+import { FIXSIZES } from "Constants/Dummy";
 
 const AddProduct = (props) => {
     const displaySnackbar = Snackbar();
@@ -23,8 +24,11 @@ const AddProduct = (props) => {
         description: "",
         gsmOrMicron: "",
         isAvailable: false,
+        sizeWithQty: false,
         images: [],
         category: [],
+        sizes: [],
+        eyelets: false,
     });
 
     const [fetched, setFetched] = useState({
@@ -50,6 +54,7 @@ const AddProduct = (props) => {
     ]);
 
     const handleSubCategorySelection = (evt) => {
+        console.log(selectedCategory);
         let temp = state.category;
         let tem = fetched.categories.findIndex((el) => el._id === evt.target.value);
         temp = [...new Set([...temp, evt.target.value])];
@@ -63,14 +68,17 @@ const AddProduct = (props) => {
         const formData = new FormData();
         formData.set("name", state.name);
         formData.set("price", state.price);
+        formData.set("numericPrice", state.numericPrice);
         formData.set("description", state.description);
         if (state.gsmOrMicron) formData.set("gsmOrMicron", parseInt(state.gsmOrMicron));
         formData.set("isAvailable", state.isAvailable);
+        formData.set("sizeWithQty", state.sizeWithQty);
+        formData.set("eyelets", state.eyelets);
+        state.sizes.map((el, i) => formData.set(`sizes[${i}]`, el));
         for (let i = 0; i < state.category.length; i++) {
             const cat = state.category[i];
             formData.set(`category[${i}]`, cat);
         }
-
         dynamicEntry.forEach((el) => {
             if (el.file) formData.append(`photos`, el.file);
         });
@@ -137,11 +145,11 @@ const AddProduct = (props) => {
                                                         Base Price<span className="text-danger">*</span>
                                                     </label>
                                                     <Input
-                                                        value={state.price}
-                                                        onChange={(evt) => setState({ ...state, price: evt.target.value })}
+                                                        value={state.numericPrice}
+                                                        onChange={(evt) => setState({ ...state, numericPrice: evt.target.value })}
                                                         className="nn form-control-alternative"
-                                                        name="price"
-                                                        placeholder="Price"
+                                                        name="numericPrice"
+                                                        placeholder="15"
                                                         type="text"
                                                     />
                                                 </FormGroup>
@@ -149,6 +157,21 @@ const AddProduct = (props) => {
                                         </Row>
 
                                         <Row>
+                                            <Col lg="6">
+                                                <FormGroup>
+                                                    <label className="form-control-label pp fs-12" htmlFor="input-name">
+                                                        Display Price<span className="text-danger">*</span>
+                                                    </label>
+                                                    <Input
+                                                        value={state.price}
+                                                        onChange={(evt) => setState({ ...state, price: evt.target.value })}
+                                                        className="nn form-control-alternative"
+                                                        name="price"
+                                                        placeholder="Rs 15 per Sq.ft"
+                                                        type="text"
+                                                    />
+                                                </FormGroup>
+                                            </Col>
                                             <Col lg="6">
                                                 <FormGroup>
                                                     <label className="form-control-label pp fs-12" htmlFor="input-name">
@@ -164,6 +187,9 @@ const AddProduct = (props) => {
                                                     />
                                                 </FormGroup>
                                             </Col>
+                                        </Row>
+
+                                        <Row>
                                             <Col lg="6">
                                                 <FormGroup>
                                                     <label className="form-control-label pp fs-12" htmlFor="input-name">
@@ -179,9 +205,6 @@ const AddProduct = (props) => {
                                                     />
                                                 </FormGroup>
                                             </Col>
-                                        </Row>
-
-                                        <Row>
                                             <Col lg="6">
                                                 <FormGroup>
                                                     <label className="form-control-label pp fs-12" htmlFor="input-name">
@@ -197,12 +220,57 @@ const AddProduct = (props) => {
                                                                 </option>
                                                             ))}
                                                     </select>
-                                                    {selectedCategory.length > 0 && selectedCategory.map((k, idx) => <KeywordBadge key={k} value={k} />)}
+                                                    {selectedCategory.length > 0 &&
+                                                        selectedCategory.map((k, idx) => (
+                                                            <KeywordBadge
+                                                                onClickHandler={() => {
+                                                                    let temp = selectedCategory;
+                                                                    temp.splice(idx, 1);
+                                                                    setSelectedCategory([...temp]);
+                                                                }}
+                                                                key={k}
+                                                                value={k}
+                                                            />
+                                                        ))}
                                                 </FormGroup>
                                             </Col>
                                         </Row>
                                         <Row>
-                                            <Col lg="3">
+                                            <Col lg="6">
+                                                <FormGroup>
+                                                    <label className="form-control-label pp fs-12" htmlFor="input-name">
+                                                        Sizes of Raw Material<span className="text-danger">*</span>
+                                                    </label>
+                                                    <select
+                                                        className="form-control form-control-alternative"
+                                                        onChange={(evt) => {
+                                                            setState({ ...state, sizes: [...state.sizes, Number(evt.target.value)] });
+                                                        }}
+                                                    >
+                                                        <option value="0">Select</option>
+                                                        {FIXSIZES.map((number, index) => (
+                                                            <option key={index} value={number}>
+                                                                {number}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                    {state.sizes.length > 0 &&
+                                                        state.sizes.map((k, idx) => (
+                                                            <KeywordBadge
+                                                                onClickHandler={(idx) => {
+                                                                    let temp = state.sizes;
+                                                                    temp.splice(idx, 1);
+                                                                    setState({ ...state });
+                                                                }}
+                                                                key={k}
+                                                                value={k}
+                                                            />
+                                                        ))}
+                                                </FormGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col lg="1">
                                                 <FormGroup>
                                                     <label className="form-control-label pp fs-12">
                                                         Available<span className="text-danger">*</span>
@@ -214,6 +282,44 @@ const AddProduct = (props) => {
                                                                 type="checkbox"
                                                                 onChange={async () => {
                                                                     setState((prev) => ({ ...state, isAvailable: !prev.isAvailable }));
+                                                                }}
+                                                            />
+                                                            <span className="custom-toggle-slider rounded-circle" />
+                                                        </label>
+                                                    </div>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col lg="3">
+                                                <FormGroup>
+                                                    <label className="form-control-label pp fs-12">
+                                                        Length and Height Required for Order<span className="text-danger">*</span>
+                                                    </label>
+                                                    <div>
+                                                        <label className="custom-toggle">
+                                                            <input
+                                                                defaultChecked={state.sizeWithQty}
+                                                                type="checkbox"
+                                                                onChange={async () => {
+                                                                    setState((prev) => ({ ...state, sizeWithQty: !prev.sizeWithQty }));
+                                                                }}
+                                                            />
+                                                            <span className="custom-toggle-slider rounded-circle" />
+                                                        </label>
+                                                    </div>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col lg="1">
+                                                <FormGroup>
+                                                    <label className="form-control-label pp fs-12">
+                                                        Eyelets Option<span className="text-danger">*</span>
+                                                    </label>
+                                                    <div>
+                                                        <label className="custom-toggle">
+                                                            <input
+                                                                defaultChecked={state.eyelets}
+                                                                type="checkbox"
+                                                                onChange={async () => {
+                                                                    setState((prev) => ({ ...state, eyelets: !prev.eyelets }));
                                                                 }}
                                                             />
                                                             <span className="custom-toggle-slider rounded-circle" />
