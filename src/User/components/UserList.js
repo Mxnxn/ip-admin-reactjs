@@ -10,6 +10,7 @@ import Snackbar from "Shared/Notification/Snackbar";
 import { Link } from "react-router-dom";
 import { USER } from "Constants/Routes";
 import ImagePreview from "Shared/Modals/ImagePreview";
+import GlobalLogout from "Shared/GlobalLogout";
 
 const UserList = () => {
     const [state, setState] = useState({
@@ -20,6 +21,7 @@ const UserList = () => {
     useEffect(() => {
         const fetch = async () => {
             const users = await GetAllUsers();
+            if (users.code === 401) return GlobalLogout();
             if (users.status) setState({ ...state, users: users.message, dataFetched: true });
         };
         fetch();

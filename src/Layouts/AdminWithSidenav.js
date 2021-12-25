@@ -17,6 +17,7 @@ import ProductList from "Product/components/ProductList";
 import AddProduct from "Product/components/AddProduct";
 import EditProduct from "Product/components/EditProduct";
 import EditImageProduct from "Product/components/EditImageProduct";
+import AddVariant from "Product/components/AddVariant";
 
 const AdminWithSidenav = (props) => {
     const { pathname } = useLocation();
@@ -61,6 +62,7 @@ const AdminWithSidenav = (props) => {
                     {/* BALANCE REQUESTS */}
                     <Route path={PRODUCT.path} exact render={() => <ProductList />} />
                     <Route path={PRODUCT.path + "/add"} exact render={() => <AddProduct />} />
+                    <Route path={PRODUCT.path + "/add/:pid/variant"} exact render={() => <AddVariant />} />
                     <Route path={PRODUCT.path + "/edit/:id"} exact render={() => <EditProduct />} />
                     <Route path={PRODUCT.path + "/edit/images/:id"} exact render={() => <EditImageProduct />} />
 

@@ -12,6 +12,7 @@ import { DeleteProduct, GetProducts, ToggleProductVisibility } from "Product/rep
 import { HiChevronDown, HiOutlineLink } from "react-icons/hi";
 import { BsImages } from "react-icons/bs";
 import { BiX } from "react-icons/bi";
+import { AiOutlineNodeIndex } from "react-icons/ai";
 
 const ProductList = () => {
     const [state, setState] = useState({
@@ -201,6 +202,10 @@ const ProductList = () => {
                                                     <Link role="menuitem" to={`${PRODUCT.path}/edit/${prodct._id}`} className="dropdown-item cp">
                                                         <HiOutlineLink />
                                                         Edit Details
+                                                    </Link>
+                                                    <Link role="menuitem" to={`${PRODUCT.path}/add/${prodct._id}/variant`} className="dropdown-item cp">
+                                                        <AiOutlineNodeIndex />
+                                                        Add New Variants
                                                     </Link>
                                                     <Link role="menuitem" to={`${PRODUCT.path}/edit/images/${prodct._id}`} className="dropdown-item cp">
                                                         <BsImages />

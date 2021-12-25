@@ -71,3 +71,30 @@ export const DeleteProduct = async (id) => {
         return error;
     }
 };
+
+export const AddProductVariant = async (formData) => {
+    try {
+        return await ApiCall(`/admin/product/add/variant`, HEADER, formData);
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+};
+
+export const EditProductVariant = async (formData) => {
+    try {
+        return await ApiCall(`/admin/product/edit/variant`, HEADER, formData);
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+};
+
+export const DeleteProductVariant = async (formData) => {
+    try {
+        return await ApiCall(`/admin/product/delete/variant`, HEADER, formData);
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+};

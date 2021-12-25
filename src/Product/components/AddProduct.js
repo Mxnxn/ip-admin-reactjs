@@ -132,7 +132,7 @@ const AddProduct = (props) => {
                                                     <Input
                                                         value={state.name}
                                                         onChange={(evt) => setState({ ...state, name: evt.target.value })}
-                                                        className="nn form-control-alternative"
+                                                        className="nn form-control"
                                                         placeholder="Name"
                                                         name="name"
                                                         type="text"
@@ -147,7 +147,7 @@ const AddProduct = (props) => {
                                                     <Input
                                                         value={state.numericPrice}
                                                         onChange={(evt) => setState({ ...state, numericPrice: evt.target.value })}
-                                                        className="nn form-control-alternative"
+                                                        className="nn form-control"
                                                         name="numericPrice"
                                                         placeholder="15"
                                                         type="text"
@@ -165,7 +165,7 @@ const AddProduct = (props) => {
                                                     <Input
                                                         value={state.price}
                                                         onChange={(evt) => setState({ ...state, price: evt.target.value })}
-                                                        className="nn form-control-alternative"
+                                                        className="nn form-control"
                                                         name="price"
                                                         placeholder="Rs 15 per Sq.ft"
                                                         type="text"
@@ -180,7 +180,7 @@ const AddProduct = (props) => {
                                                     <Input
                                                         value={state.gsmOrMicron}
                                                         onChange={(evt) => setState({ ...state, gsmOrMicron: evt.target.value })}
-                                                        className="nn form-control-alternative"
+                                                        className="nn form-control"
                                                         name="gsmOrMicron"
                                                         placeholder="Weight"
                                                         type="text"
@@ -198,7 +198,7 @@ const AddProduct = (props) => {
                                                     <Input
                                                         value={state.description}
                                                         onChange={(evt) => setState({ ...state, description: evt.target.value })}
-                                                        className="nn form-control-alternative"
+                                                        className="nn form-control"
                                                         name="description"
                                                         placeholder="Additional Details"
                                                         type="text"
@@ -210,7 +210,7 @@ const AddProduct = (props) => {
                                                     <label className="form-control-label pp fs-12" htmlFor="input-name">
                                                         Child Categories<span className="text-danger">*</span>
                                                     </label>
-                                                    <select className="form-control form-control-alternative" onChange={handleSubCategorySelection}>
+                                                    <select className="form-control form-control" onChange={handleSubCategorySelection}>
                                                         <option value="0">Select</option>
                                                         {fetched.categories &&
                                                             fetched.categories.length > 0 &&
@@ -242,7 +242,7 @@ const AddProduct = (props) => {
                                                         Sizes of Raw Material<span className="text-danger">*</span>
                                                     </label>
                                                     <select
-                                                        className="form-control form-control-alternative"
+                                                        className="form-control form-control"
                                                         onChange={(evt) => {
                                                             setState({ ...state, sizes: [...state.sizes, Number(evt.target.value)] });
                                                         }}

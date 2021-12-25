@@ -11,6 +11,8 @@ export const ApiCall = (pathname, HEADER, PAYLOAD) => {
                 resolve(response.data);
             }
         } catch (error) {
+            console.log(error.response);
+
             if (error.response.status === 404) reject({ status: false, message: "Internal error", code: 500 });
             if (error.response) reject(error.response.data);
         }

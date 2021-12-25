@@ -24,7 +24,7 @@ const Login = ({ setView }) => {
                 localStorage.setItem("_b", response.message.token);
                 localStorage.setItem("_c", response.message.email);
                 localStorage.setItem("_uid", response.message.uid);
-                history.push("/admin/dashboard");
+                window.location.reload();
             } else {
                 setError(response.data);
             }

@@ -24,7 +24,7 @@ const Sidebar = ({ togglePanel }) => {
         const { pathname } = useLocation();
 
         // const pths = "/" + pathname.split("/")[1] + "/" + pathname.split("/")[2];
-        return pathname === path ? true : false;
+        return pathname.includes(path) ? true : false;
     };
     // creates the links that appear in the left menu / Sidebar
 

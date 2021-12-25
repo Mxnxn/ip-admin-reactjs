@@ -11,7 +11,7 @@ import Snackbar from "Shared/Notification/Snackbar";
 import { GetCategories } from "Category/Repository/Category";
 
 import KeywordBadge from "Shared/KeywordBadge";
-import { EditAProduct, getProduct } from "Product/repository/Product";
+import { DeleteProductVariant, EditAProduct, EditProductVariant, getProduct } from "Product/repository/Product";
 import { FIXSIZES } from "Constants/Dummy";
 
 const EditProduct = (props) => {
@@ -53,6 +53,11 @@ const EditProduct = (props) => {
                     sizes: product.message.sizes,
                     eyelets: product.message.eyelets,
                 });
+                const varr = product.message.variants.map((el) => ({
+                    value: { details: el.details, name: el.name, price: el.price, numericPrice: el.numericPrice, pid: el.pid, _id: el._id },
+                    validation: { details: false, numericPrice: false, name: false },
+                }));
+                setVariant([...varr]);
                 setSelectedCategory(product.message.category);
             }
             if (response.status) setFetched({ categories: response.message, stopLoading: true });
@@ -106,6 +111,28 @@ const EditProduct = (props) => {
         });
     };
 
+    const [variants, setVariant] = useState([]);
+
+    const onUpdateVariant = async (index) => {
+        const formData = new FormData();
+        Object.keys(variants[index].value).map((key) => formData.set(key, variants[index].value[key]));
+        const response = await EditProductVariant(formData);
+        console.log(response);
+        if (response.code !== 200) return displaySnackbar({ variant: "danger", head: "Invalid", message: response.message[0] });
+        return displaySnackbar({ variant: "success", head: "Successfully", message: response.message[0] });
+    };
+    const onDeleteVariant = async (index) => {
+        const formData = new FormData();
+        formData.set("_id", variants[index].value["_id"]);
+        formData.set("pid", variants[index].value["pid"]);
+        const response = await DeleteProductVariant(formData);
+        console.log(response);
+        if (response.code !== 200) return displaySnackbar({ variant: "danger", head: "Invalid", message: response.message[0] });
+        variants.splice(index, 1);
+        setVariant([...variants]);
+        return displaySnackbar({ variant: "success", head: "Successfully", message: response.message[0] });
+    };
+
     return (
         <>
             {fetched.stopLoading && (
@@ -141,7 +168,7 @@ const EditProduct = (props) => {
                                                     <Input
                                                         value={state.name}
                                                         onChange={(evt) => setState({ ...state, name: evt.target.value })}
-                                                        className="nn form-control-alternative"
+                                                        className="nn form-control"
                                                         placeholder="Name"
                                                         name="name"
                                                         type="text"
@@ -156,7 +183,7 @@ const EditProduct = (props) => {
                                                     <Input
                                                         value={state.price}
                                                         onChange={(evt) => setState({ ...state, price: evt.target.value })}
-                                                        className="nn form-control-alternative"
+                                                        className="nn form-control"
                                                         name="price"
                                                         placeholder="Price"
                                                         type="text"
@@ -174,7 +201,7 @@ const EditProduct = (props) => {
                                                     <Input
                                                         value={state.gsmOrMicron}
                                                         onChange={(evt) => setState({ ...state, gsmOrMicron: evt.target.value })}
-                                                        className="nn form-control-alternative"
+                                                        className="nn form-control"
                                                         name="gsmOrMicron"
                                                         placeholder="Weight"
                                                         type="text"
@@ -189,7 +216,7 @@ const EditProduct = (props) => {
                                                     <Input
                                                         value={state.description}
                                                         onChange={(evt) => setState({ ...state, description: evt.target.value })}
-                                                        className="nn form-control-alternative"
+                                                        className="nn form-control"
                                                         name="description"
                                                         placeholder="Additional Details"
                                                         type="text"
@@ -204,7 +231,7 @@ const EditProduct = (props) => {
                                                     <label className="form-control-label pp fs-12" htmlFor="input-name">
                                                         Categories<span className="text-danger">*</span>
                                                     </label>
-                                                    <select className="form-control form-control-alternative" onChange={handleSubCategorySelection}>
+                                                    <select className="form-control form-control" onChange={handleSubCategorySelection}>
                                                         <option value="0">Select</option>
                                                         {fetched.categories &&
                                                             fetched.categories.length > 0 &&
@@ -223,7 +250,7 @@ const EditProduct = (props) => {
                                                         Sizes of raw materials<span className="text-danger">*</span>
                                                     </label>
                                                     <select
-                                                        className="form-control form-control-alternative"
+                                                        className="form-control form-control"
                                                         onChange={(evt) => {
                                                             setState({ ...state, sizes: [...state.sizes, Number(evt.target.value)] });
                                                         }}
@@ -309,7 +336,116 @@ const EditProduct = (props) => {
                                                 </FormGroup>
                                             </Col>
                                         </Row>
+                                        <Row>
+                                            <Col lg="12" sm="12">
+                                                <div className="d-flex align-items-center my-1">
+                                                    <h2
+                                                        style={{
+                                                            margin: "auto 0",
+                                                        }}
+                                                        className="geb"
+                                                    >
+                                                        Variants
+                                                    </h2>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        {variants.map((variant, idex) => (
+                                            <Row>
+                                                <Col lg="3" sm="12">
+                                                    <FormGroup>
+                                                        <label className="form-control-label pp fs-12" htmlFor="input-name">
+                                                            Name<span className="text-danger">*</span>
+                                                        </label>
+                                                        <Input
+                                                            value={variant.value.name}
+                                                            onChange={(evt) => {
+                                                                const temp = [...variants];
+                                                                const idx = temp.findIndex((el) => el.value._id === variant.value._id);
+                                                                temp[idx].value.name = evt.target.value;
+                                                                setVariant([...temp]);
+                                                            }}
+                                                            className={`nn form-control ${variant.validation.name && "is-invalid"}`}
+                                                            placeholder="Variant Of This Product"
+                                                            type="text"
+                                                        />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col lg="4" sm="12">
+                                                    <FormGroup>
+                                                        <label className="form-control-label pp fs-12" htmlFor="input-name">
+                                                            Detail<span className="text-danger">*</span>
+                                                        </label>
+                                                        <Input
+                                                            value={variant.value.details}
+                                                            onChange={(evt) => {
+                                                                const temp = [...variants];
+                                                                const idx = temp.findIndex((el) => el.value._id === variant.value._id);
+                                                                temp[idx].value.details = evt.target.value;
+                                                                setVariant([...temp]);
+                                                            }}
+                                                            className={`nn form-control ${variant.validation.details && "is-invalid"}`}
+                                                            placeholder="Variant Of This Product"
+                                                            type="text"
+                                                        />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col lg="4" sm="6">
+                                                    <FormGroup>
+                                                        <label className="form-control-label pp fs-12" htmlFor="input-name">
+                                                            Price<span className="text-danger">*</span>
+                                                        </label>
+                                                        <Input
+                                                            value={variant.value.price}
+                                                            onChange={(evt) => {
+                                                                const temp = [...variants];
+                                                                const idx = temp.findIndex((el) => el.value._id === variant.value._id);
+                                                                temp[idx].value.price = evt.target.value;
+                                                                setVariant([...temp]);
+                                                            }}
+                                                            className={`nn form-control ${variant.validation.price && "is-invalid"}`}
+                                                            placeholder="Price"
+                                                            type="price"
+                                                        />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col lg="3" sm="6">
+                                                    <FormGroup>
+                                                        <label className="form-control-label pp fs-12" htmlFor="input-name">
+                                                            Price<span className="text-danger">*</span>
+                                                        </label>
+                                                        <Input
+                                                            value={variant.value.numericPrice}
+                                                            onChange={(evt) => {
+                                                                const temp = [...variants];
+                                                                const idx = temp.findIndex((el) => el.value._id === variant.value._id);
+                                                                temp[idx].value.numericPrice = evt.target.value;
+                                                                setVariant([...temp]);
+                                                            }}
+                                                            className={`nn form-control ${variant.validation.numericPrice && "is-invalid"}`}
+                                                            placeholder="Price"
+                                                            type="number"
+                                                        />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col lg="2" sm="6">
+                                                    <FormGroup>
+                                                        <label className="form-control-label pp fs-12" htmlFor="input-name">
+                                                            Action<span className="text-danger">*</span>
+                                                        </label>
+                                                        <div>
+                                                            <Button size="sm" color="warning" onClick={() => onUpdateVariant(idex)}>
+                                                                Update
+                                                            </Button>
 
+                                                            <Button size="sm" color="danger" onClick={() => onDeleteVariant(idex)}>
+                                                                Delete From Product
+                                                            </Button>
+                                                        </div>
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+                                        ))}
                                         <Row className="mt-3">
                                             <Col lg="6">
                                                 <Button color="primary" onClick={handleSubmit}>
