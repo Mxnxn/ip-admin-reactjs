@@ -4,7 +4,7 @@ import { FiPackage } from "react-icons/fi";
 
 export const ADMIN = {
     heading: "Admin",
-    path: "",
+    path: "/admin",
     icon: Users,
     id: 3,
 };
@@ -73,10 +73,10 @@ export const AUTHROUTES = {
 };
 
 export const ALLROUTES = {
-    "/": ADMIN,
-    "/dashboard": DASHBOARD,
-    "/users": USER,
-    "/category": CATEGORY,
-    "/recentrequests": BALANCEREQUEST,
-    "/products": PRODUCT,
+    "/admin": ADMIN,
+    "/admin/dashboard": DASHBOARD,
+    "/admin/users": USER,
+    "/admin/category": CATEGORY,
+    "/admin/recentrequests": BALANCEREQUEST,
+    "/admin/products": PRODUCT,
 };
